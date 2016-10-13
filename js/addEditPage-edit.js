@@ -35,6 +35,35 @@ $(function () {
     }
 
 // 文件上传
+     $('.img-upload-top').on('change', function () {
+        $('.upload-title').text('上传中');
+        $('.img-upload-top').attr('disabled',true);
+        var file = new FormData();
+        file.append('file', this.files[0])
+        $.ajax({
+            type: 'post',
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+            url:  apiDomain + '/file/upload-file',
+            data: file,
+            error:function () {
+                alert('图片上传失败')
+            },
+            success: function (res) {
+                console.log(res)
+                if (res.status == 2000) {
+                    $('#activityTopArea').attr('src', res.data);
+                    $('.upload-title').text('点击上传图片');
+                    $('#activityItem').attr('disabled',false);
+                }
+                else (
+                    alert('图片上传失败')
+                )
+            }
+        })
+    });
+    
     $('.img-upload').on('change',function () {
         $('.upload-title').text('上传中');
         $('.img-upload').attr('disabled',true);
@@ -124,29 +153,6 @@ $(function () {
             }
         })
     })
-
-
-    // $('#activityItem').on('change',function () {
-    //     var file = new FormData();
-    //     file.append('file',this.files[0])
-    //     console.log(file)
-    //     $.ajax({
-    //         type : 'post',
-    //         contentType : false,
-    //         processData : false,
-    //         dataType : 'json',
-    //         url: apiDomain+'/postcard-album/create',
-    //         data : file,
-    //         success : function (res) {
-    //             console.log(res)
-    //             if(res.status = 2000){
-    //                 $('#upload-pic').attr('src',res.data);
-    //             }
-    //         }
-    //     })
-    // })
-
-
 
     function bindCatToList(cat_id) {
         $.ajax({
